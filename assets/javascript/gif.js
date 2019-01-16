@@ -7,6 +7,7 @@
   function displaydestinationInfo() {
 
     var searchWord = $(this).attr("data-name");
+    console.log(searchWord);
     var queryURL = `https://api.giphy.com/v1/gifs/search?q=${searchWord}&api_key=dc6zaTOxFJmzC&limit=1`;
     console.log(searchWord);
     console.log(queryURL);
@@ -14,19 +15,20 @@ $.ajax({
 url: queryURL,
 method: "GET"
 }).then(function (response) {
-console.log(response);
+console.log('response ' + response);
+console.log(response.data);
 console.log(response.data[0].url);
 var results = response.data[0];
+console.log(results)
 // Only taking action if the photo has an appropriate rating
 if (results.rating !== "r" && results.rating !== "pg-13") {
     // Creating a div template gif
-    var ptemplate = `<p>
-        ${results.ratings}</p>
+    var ptemplate = `<p> Ratings:${results.rating}</p>
         <div>
         <img src="${ results.images.fixed_height.url }">
         </div>`
         console.log(ptemplate);
-        ddestinationContainer.innerHTML = ptemplate;
+        destinationContainer.innerHTML = ptemplate;
 
 }
 })
