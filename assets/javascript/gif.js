@@ -25,7 +25,7 @@ if (results.rating !== "r" && results.rating !== "pg-13") {
     // Creating a div template gif
     var ptemplate = `<p> Ratings:${results.rating}</p>
         <div>
-        <img src="${ results.images.fixed_height.url }">
+        <img src="${ results.images.fixed_height_still.url }"  onclick="animateGif()"  class="gif" data-animate="${ results.images.fixed_height.url }" data-still="${ results.images.fixed_height_still.url }" data-state="still">
         </div>`
         console.log(ptemplate);
         destinationContainer.innerHTML = ptemplate;
@@ -76,3 +76,21 @@ if (results.rating !== "r" && results.rating !== "pg-13") {
 
   // Calling the renderButtons function to display the intial buttons
   renderButtons();
+
+  function animateGif(){ 
+    console.log('click images')
+    // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
+    var state = $(this).attr("data-state");
+    console.log('state '+ state);
+    // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+    // Then, set the image's data-state to animate
+    // Else set src to the data-still value
+    if (state === "still") {
+      $(this).attr("src", $(this).attr("data-animate"));
+      $(this).attr("data-state", "animate");
+    } else {
+      $(this).attr("src", $(this).attr("data-still"));
+      $(this).attr("data-state", "still");
+    }
+    console.log(this);
+  };
