@@ -1,5 +1,5 @@
 
-  destinationContainer = document.getElementById("destinations-view")
+  const destinationContainer = $("#destinations-view")
   // Initial array of destinations
   var destinations = ["London Tower", "Irland", "Switzerland", "New Zeland"];
 
@@ -8,30 +8,33 @@
 
     var searchWord = $(this).attr("data-name");
     console.log(searchWord);
-    var queryURL = `https://api.giphy.com/v1/gifs/search?q=${searchWord}&api_key=dc6zaTOxFJmzC&limit=1`;
+    var queryURL = `https://api.giphy.com/v1/gifs/search?q=${searchWord}&api_key=dc6zaTOxFJmzC&limit=10`;
     console.log(searchWord);
     console.log(queryURL);
-$.ajax({
-url: queryURL,
-method: "GET"
-}).then(function (response) {
-console.log('response ' + response);
-console.log(response.data);
-console.log(response.data[0].url);
-var results = response.data[0];
-console.log(results)
-// Only taking action if the photo has an appropriate rating
-if (results.rating !== "r" && results.rating !== "pg-13") {
-    // Creating a div template gif
-    var ptemplate = `<p> Ratings:${results.rating}</p>
-        <div>
-        <img src="${ results.images.fixed_height_still.url }"  class="gif" data-animate="${ results.images.fixed_height.url }" data-still="${ results.images.fixed_height_still.url }" data-state="still">
-        </div>`
-        console.log(ptemplate);
-        destinationContainer.innerHTML = ptemplate;
+    $.ajax({
+    url: queryURL,
+    method: "GET"
+    }).then(function (response) {
+      console.log('response ' + response);
+      console.log(response.data);
+      console.log(response.data[0].url);
+      var results = response.data;
+      console.log(results)
+      for (var i = 0; i < results.length; i++) {
+      // Only taking action if the photo has an appropriate rating
+        if (results.rating !== "r" && results.rating !== "pg-13") {
+          // Creating a div template gif
+          var ptemplate = `<p> Ratings:${results[i].rating}</p>
+          <div>
+          <img src="${ results[i].images.fixed_height_still.url }"  class="gif" data-animate="${ results[i].images.fixed_height.url }" data-still="${ results[i].images.fixed_height_still.url }" data-state="still">
+          </div>`
+          console.log(ptemplate);
+          console.log(destinationContainer);
+          destinationContainer.append(ptemplate);
 
-}
-})
+        }
+    }
+    })
   };
 
 
@@ -77,7 +80,7 @@ if (results.rating !== "r" && results.rating !== "pg-13") {
   // Calling the renderButtons function to display the intial buttons
   renderButtons();
 
-  $(destinationContainer).on('click', ".gif", function(){ 
+  $(destinationContainer).on('click', '.gif', function(){ 
     console.log('click images')
     // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
     var state = $(this).attr("data-state");
